@@ -26,13 +26,13 @@
         <ImageView fx:id="inputImage" fitHeight="278.0" fitWidth="278.0" layoutX="14.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
             <Image url="@../images/defaultBackGround.png" />
         </ImageView>
-        <ImageView fx:id="sinogramImage" fitHeight="278.0" fitWidth="278.0" layoutX="314.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
+        <ImageView fx:id="patternImage" fitHeight="278.0" fitWidth="278.0" layoutX="314.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
             <Image url="@../images/defaultBackGround.png" />
         </ImageView>
-        <ImageView fx:id="outputImage" fitHeight="278.0" fitWidth="278.0" layoutX="14.0" layoutY="314.0" pickOnBounds="true" preserveRatio="true">
+        <ImageView fx:id="filteringOutput" fitHeight="278.0" fitWidth="278.0" layoutX="14.0" layoutY="314.0" pickOnBounds="true" preserveRatio="true">
             <Image url="@../images/defaultBackGround.png" />
         </ImageView>
-        <ImageView fx:id="stepImage" fitHeight="278.0" fitWidth="278.0" layoutX="314.0" layoutY="314.0" pickOnBounds="true" preserveRatio="true">
+        <ImageView fx:id="machineLearningOutput" fitHeight="278.0" fitWidth="278.0" layoutX="314.0" layoutY="314.0" pickOnBounds="true" preserveRatio="true">
             <Image url="@../images/defaultBackGround.png" />
         </ImageView>
         <LineChart fx:id="lineChart" layoutX="14.0" layoutY="14.0" prefHeight="578.0" prefWidth="578.0" title="Root Mean Square Error" visible="false">
