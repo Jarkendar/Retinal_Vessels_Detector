@@ -8,8 +8,10 @@ import javafx.scene.image.ImageView;
 import org.opencv.core.Core;
 
 import java.io.File;
+import java.util.Observable;
+import java.util.Observer;
 
-public class Controller {
+public class Controller implements Observer {
 
     static{ System.loadLibrary(Core.NATIVE_LIBRARY_NAME);}
 
@@ -57,5 +59,15 @@ public class Controller {
     }
 
     public void clickStartButton(ActionEvent actionEvent) {
+        FilterImage filterImage = new FilterImage(new FileManager().readImage(fileImage));
+        filterImage.addObserver(this);
+        new Thread(filterImage).start();
+    }
+
+    @Override
+    public void update(Observable observable, Object arg) {
+        if (observable instanceof FilterImage){
+            filteringOutput.setImage(new FileManager().convertMatToImage(((FilterImage) observable).getOutputBitmap()));
+        }
     }
 }

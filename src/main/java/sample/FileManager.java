@@ -16,13 +16,20 @@ public class FileManager {
 
     public Image readImageFromFile(File file) {
         Mat bitmap = readImage(file);
-        BufferedImage bufferedImage = new BufferedImage(bitmap.width(), bitmap.height(), BufferedImage.TYPE_INT_RGB);
-        for (int i = 0; i < bitmap.width(); i++) {
-            for (int j = 0; j < bitmap.height(); j++) {
-                if (bitmap.get(j,i) == null){
-                    System.out.println(i+" "+bitmap.width()+" "+(i<bitmap.width())+" "+j+" "+bitmap.height()+" "+(j<bitmap.height()));
+        return convertMatToImage(bitmap);
+    }
+
+    public Image convertMatToImage(Mat mat){
+        BufferedImage bufferedImage = new BufferedImage(mat.width(), mat.height(), BufferedImage.TYPE_INT_RGB);
+        for (int i = 0; i < mat.width(); i++) {
+            for (int j = 0; j < mat.height(); j++) {
+                Color color;
+                if (mat.get(j,i).length == 1){
+//                    System.out.println(i+" "+mat.width()+" "+(i<mat.width())+" "+j+" "+mat.height()+" "+(j<mat.height()));
+                    color = new Color((int) mat.get(j,i)[0], (int) mat.get(j,i)[0], (int) mat.get(j,i)[0], 255);
+                }else {
+                    color = new Color((int) mat.get(j,i)[2], (int) mat.get(j,i)[1], (int) mat.get(j,i)[0], 255);
                 }
-                Color color = new Color((int) bitmap.get(j,i)[2], (int) bitmap.get(j,i)[1], (int) bitmap.get(j,i)[0], 255);
                 bufferedImage.setRGB(i,j, color.getRGB());
             }
         }
