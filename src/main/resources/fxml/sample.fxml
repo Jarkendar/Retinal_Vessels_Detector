@@ -26,7 +26,7 @@
         <ImageView fx:id="inputImage" fitHeight="278.0" fitWidth="278.0" layoutX="14.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
             <Image url="@../images/defaultBackGround.png" />
         </ImageView>
-        <ImageView fx:id="patternImage" fitHeight="278.0" fitWidth="278.0" layoutX="314.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
+        <ImageView fx:id="expertMaskImage" fitHeight="278.0" fitWidth="278.0" layoutX="314.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
             <Image url="@../images/defaultBackGround.png" />
         </ImageView>
         <ImageView fx:id="filteringOutput" fitHeight="278.0" fitWidth="278.0" layoutX="14.0" layoutY="314.0" pickOnBounds="true" preserveRatio="true">
@@ -43,7 +43,8 @@
                 <NumberAxis fx:id="lineChartYAxis" side="LEFT" />
             </yAxis>
         </LineChart>
-        <Button fx:id="chooseFileButton" layoutX="614.0" layoutY="14.0" mnemonicParsing="false" onAction="#clickChooseFile" prefHeight="26.0" prefWidth="278.0" text="Choose file" />
-        <Button fx:id="transformButton" disable="true" layoutX="736.0" layoutY="436.0" mnemonicParsing="false" onAction="#clickStartButton" prefHeight="150.0" prefWidth="150.0" text="START" />
+        <Button fx:id="chooseFileImageButton" layoutX="614.0" layoutY="14.0" mnemonicParsing="false" onAction="#clickChooseFileImege" prefHeight="26.0" prefWidth="278.0" text="Choose File Image" />
+        <Button fx:id="chooseFileExpertButton" layoutX="614.0" layoutY="44.0" mnemonicParsing="false" onAction="#clickChooseFileExpert" prefHeight="26.0" prefWidth="278.0" text="Choose Expert Mask" />
+        <Button fx:id="startButton" disable="true" layoutX="736.0" layoutY="436.0" mnemonicParsing="false" onAction="#clickStartButton" prefHeight="150.0" prefWidth="150.0" text="START" />
     </AnchorPane>
 </GridPane>

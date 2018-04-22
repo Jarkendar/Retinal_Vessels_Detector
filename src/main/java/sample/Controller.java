@@ -1,25 +1,59 @@
 package sample;
 
 
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
+import javafx.scene.control.Button;
+import javafx.scene.image.ImageView;
 import org.opencv.core.Core;
-import org.opencv.core.CvType;
-import org.opencv.core.Mat;
-import org.opencv.core.Scalar;
+
+import java.io.File;
 
 public class Controller {
 
     static{ System.loadLibrary(Core.NATIVE_LIBRARY_NAME);}
 
-    public void clickChooseFile(ActionEvent actionEvent) {
-        System.out.println("Welcome to OpenCV " + Core.VERSION);
-        Mat m = new Mat(5, 10, CvType.CV_8UC1, new Scalar(0));
-        System.out.println("OpenCV Mat: " + m);
-        Mat mr1 = m.row(1);
-        mr1.setTo(new Scalar(1));
-        Mat mc5 = m.col(5);
-        mc5.setTo(new Scalar(5));
-        System.out.println("OpenCV Mat data:\n" + m.dump());
+    public Button chooseFileImageButton;
+    public Button chooseFileExpertButton;
+    public Button startButton;
+    public ImageView inputImage;
+    public ImageView expertMaskImage;
+    public ImageView filteringOutput;
+    public ImageView machineLearningOutput;
+
+    private File fileImage;
+    private File fileExpertMask;
+
+    public void clickChooseFileImege(ActionEvent actionEvent) {
+        fileImage = Main.openFileChooser();
+        if(fileImage != null){
+            Platform.runLater(()->{
+                inputImage.setImage(new FileManager().readImageFromFile(fileImage));
+            });
+        }
+        checkFile(fileImage);
+    }
+
+    public void clickChooseFileExpert(ActionEvent actionEvent) {
+        fileExpertMask = Main.openFileChooser();
+        if(fileExpertMask != null){
+            Platform.runLater(()->{
+                expertMaskImage.setImage(new FileManager().readImageFromFile(fileExpertMask));
+            });
+        }
+        checkFile(fileExpertMask);
+    }
+
+    private boolean checkFileExist(){
+        return fileImage != null && fileExpertMask != null;
+    }
+
+    private void checkFile(File file){
+        if (file != null){
+            startButton.setDisable(!checkFileExist());
+        }else {
+            startButton.setDisable(checkFileExist());
+        }
     }
 
     public void clickStartButton(ActionEvent actionEvent) {
