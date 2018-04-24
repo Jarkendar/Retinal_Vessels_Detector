@@ -5,7 +5,6 @@ import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.scene.control.Button;
 import javafx.scene.image.ImageView;
-import org.opencv.core.Core;
 
 import java.io.File;
 import java.util.Observable;
@@ -13,7 +12,6 @@ import java.util.Observer;
 
 public class Controller implements Observer {
 
-    static{ System.loadLibrary(Core.NATIVE_LIBRARY_NAME);}
 
     public Button chooseFileImageButton;
     public Button chooseFileExpertButton;
@@ -28,8 +26,8 @@ public class Controller implements Observer {
 
     public void clickChooseFileImege(ActionEvent actionEvent) {
         fileImage = Main.openFileChooser();
-        if(fileImage != null){
-            Platform.runLater(()->{
+        if (fileImage != null) {
+            Platform.runLater(() -> {
                 inputImage.setImage(new FileManager().readImageFromFile(fileImage));
             });
         }
@@ -38,22 +36,22 @@ public class Controller implements Observer {
 
     public void clickChooseFileExpert(ActionEvent actionEvent) {
         fileExpertMask = Main.openFileChooser();
-        if(fileExpertMask != null){
-            Platform.runLater(()->{
+        if (fileExpertMask != null) {
+            Platform.runLater(() -> {
                 expertMaskImage.setImage(new FileManager().readImageFromFile(fileExpertMask));
             });
         }
         checkFile(fileExpertMask);
     }
 
-    private boolean checkFileExist(){
+    private boolean checkFileExist() {
         return fileImage != null && fileExpertMask != null;
     }
 
-    private void checkFile(File file){
-        if (file != null){
+    private void checkFile(File file) {
+        if (file != null) {
             startButton.setDisable(!checkFileExist());
-        }else {
+        } else {
             startButton.setDisable(checkFileExist());
         }
     }
@@ -66,7 +64,7 @@ public class Controller implements Observer {
 
     @Override
     public void update(Observable observable, Object arg) {
-        if (observable instanceof FilterImage){
+        if (observable instanceof FilterImage) {
             filteringOutput.setImage(new FileManager().convertMatToImage(((FilterImage) observable).getOutputBitmap()));
         }
     }

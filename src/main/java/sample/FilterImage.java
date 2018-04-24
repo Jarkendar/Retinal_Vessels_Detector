@@ -1,13 +1,22 @@
 package sample;
 
+import org.opencv.core.Core;
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
+import org.opencv.core.Size;
+import org.opencv.imgcodecs.Imgcodecs;
+import org.opencv.imgproc.Imgproc;
 
 import java.util.LinkedList;
 import java.util.Observable;
 import java.util.Observer;
 
 public class FilterImage extends Observable implements Runnable {
+
+    static {
+        System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
+    }
+
 
     private LinkedList<Observer> observers = new LinkedList<>();
 
@@ -21,9 +30,25 @@ public class FilterImage extends Observable implements Runnable {
     @Override
     public void run() {
         Mat greenChannel = cutGreenToGrayscale(bitmap);
-
-        outputBitmap = greenChannel;
+        Mat gray = new Mat();
+        Imgproc.cvtColor(greenChannel, gray, Imgproc.COLOR_BGR2GRAY);
+        Mat canny = new Mat();
+        Imgproc.Canny(gray, canny, 150, 255, 5, true);
+        Mat dilate = new Mat();
+        Mat kernel = Imgproc.getStructuringElement(Imgproc.MORPH_ELLIPSE, new Size(3, 3));
+        Imgproc.dilate(canny, dilate, kernel);
+        Mat median = new Mat();
+        Imgproc.medianBlur(dilate, median, 3);
+        dilate = new Mat();
+        kernel = Imgproc.getStructuringElement(Imgproc.MORPH_ELLIPSE, new Size(9, 9));
+        Imgproc.dilate(canny, dilate, kernel);
+        outputBitmap = dilate;
+        saveBitmap(outputBitmap, "out");
         notifyObservers();
+    }
+
+    private void saveBitmap(Mat b, String name) {
+        Imgcodecs.imwrite(name + ".jpg", b);
     }
 
     /**
@@ -33,10 +58,10 @@ public class FilterImage extends Observable implements Runnable {
      * @return Mat in grayscale
      */
     private Mat cutGreenToGrayscale(Mat bitmap) {
-        Mat mat = new Mat(bitmap.rows(), bitmap.cols(), CvType.CV_32F);
+        Mat mat = new Mat(bitmap.rows(), bitmap.cols(), CvType.CV_8UC3);
         for (int i = 0; i < bitmap.rows(); i++) {
             for (int j = 0; j < bitmap.cols(); j++) {
-                mat.put(i, j, bitmap.get(i, j)[1]);
+                mat.put(i, j, 0.0, bitmap.get(i, j)[1], 0.0);
             }
         }
         return mat;
