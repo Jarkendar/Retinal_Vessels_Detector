@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/Learner/Learner.iml" filepath="$PROJECT_DIR$/Learner/Learner.iml" />
       <module fileurl="file://$PROJECT_DIR$/Retinal_Vessels_Detector.iml" filepath="$PROJECT_DIR$/Retinal_Vessels_Detector.iml" />
     </modules>
   </component>

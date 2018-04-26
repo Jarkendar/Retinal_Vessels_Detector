@@ -1,5 +1,3 @@
-package sample;
-
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -15,11 +13,11 @@ public class Main extends Application {
     private static Stage stage;
 
     @Override
-    public void start(Stage primaryStage) throws Exception{
+    public void start(Stage primaryStage) throws Exception {
         stage = primaryStage;
-        Parent root = FXMLLoader.load(getClass().getResource("/fxml/detectorLayout.fxml"));
-        primaryStage.setTitle("Retinal_Vessels_Detector");
-        primaryStage.setScene(new Scene(root, 900, 600));
+        Parent root = FXMLLoader.load(getClass().getResource("/fxml/learnerLayout.fxml"));
+        primaryStage.setTitle("Learner");
+        primaryStage.setScene(new Scene(root, 428, 266));
         primaryStage.show();
     }
 

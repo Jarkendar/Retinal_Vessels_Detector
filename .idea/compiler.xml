@@ -16,10 +16,12 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+        <module name="Learner" />
         <module name="Retinal_Vessels_Detector" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
+      <module name="Learner" target="1.8" />
       <module name="Retinal_Vessels_Detector" target="1.8" />
     </bytecodeTargetLevel>
   </component>
