@@ -20,23 +20,28 @@ public class Controller {
 
 
     public void chooseImage(ActionEvent actionEvent) {
-        getImageFile(imageFile, imageButton);
+        imageFile = getImageFile(imageButton);
+        validateFileNotNull();
     }
 
     public void chooseExpert(ActionEvent actionEvent) {
-        getImageFile(expertFile, expertButton);
+        expertFile = getImageFile(expertButton);
+        validateFileNotNull();
     }
 
     public void chooseArea(ActionEvent actionEvent) {
-        getImageFile(areaFile, areaButton);
+        areaFile = getImageFile(areaButton);
+        validateFileNotNull();
     }
 
     public void chooseARFF(ActionEvent actionEvent) {
         arffFile = Main.openFileChooser();
         if (getFileExtension(arffFile).equals("arff")) {
             arffButton.setText(arffFile.getName());
+            modelButton.setDisable(false);
         } else {
             arffButton.setText(arffFile.getName() + " is not arff file");
+            modelButton.setDisable(true);
         }
     }
 
@@ -50,17 +55,21 @@ public class Controller {
         }
     }
 
-    private void getImageFile(File file, Button button) {
-        file = Main.openFileChooser();
-        System.out.println(file.getPath());
+    private File getImageFile(Button button) {
+        File file = Main.openFileChooser();
         if (file != null) {
             button.setText(file.getName());
         } else {
             button.setText("Choose file");
         }
+        return file;
     }
 
-    public void startCreationOfDataSet(ActionEvent actionEvent) {
+    private void validateFileNotNull() {
+        dataSetButton.setDisable(!(imageFile != null && expertFile != null && areaFile != null));
+    }
+
+    public void startPreparingOfDataSet(ActionEvent actionEvent) {
     }
 
     public void startLearnModel(ActionEvent actionEvent) {
