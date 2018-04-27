@@ -3,14 +3,19 @@ import org.opencv.core.Mat;
 import org.opencv.core.Rect;
 import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
+import weka.core.*;
+import weka.core.converters.ArffSaver;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.*;
 
 public class DataSetCreator extends Observable implements Runnable {
 
     public static final String ERROR_MATRIX_SIZE_IS_INCORRECT = "MATRIX_SIZE_IS_INCORRECT";
     public static final String CREATE_MEASURES = "CREATE_MEASURES";
+    public static final String CREATE_ARFF_SET = "CREATE_ARFF_SET";
+    public static final String DONE = "DONE";
     private static final int ODD_SQUARE_SIZE = 5;
     private static final int NUMBER_OF_MEASURES = 10 * 1000;
 
@@ -52,6 +57,9 @@ public class DataSetCreator extends Observable implements Runnable {
             System.out.println("Is correct");
             notifyObservers(CREATE_MEASURES);
             ArrayList<Measure> measures = createMeasurements(NUMBER_OF_MEASURES);
+            notifyObservers(CREATE_ARFF_SET);
+            saveDataSetAsARFF(measures);
+            notifyObservers(DONE);
         } else {
             System.out.println("Error incorrect sizes");
             notifyObservers(ERROR_MATRIX_SIZE_IS_INCORRECT);
@@ -144,6 +152,46 @@ public class DataSetCreator extends Observable implements Runnable {
             }
         }
         return balance;
+    }
+
+    private void saveDataSetAsARFF(ArrayList<Measure> measures) {
+        FastVector atts = new FastVector();
+        List<Instance> instances = new ArrayList<Instance>();
+        for (int i = 0; i < Math.pow(ODD_SQUARE_SIZE, 2) + 1; i++) {
+            Attribute current = new Attribute("Attribute" + i);
+            if (i == 0) {
+                for (int j = 0; j < measures.size(); j++) {
+                    instances.add(new SparseInstance((int) Math.pow(ODD_SQUARE_SIZE, 2) + 1));
+                }
+            }
+            if (i != Math.pow(ODD_SQUARE_SIZE, 2)) {
+                for (int j = 0; j < measures.size(); j++) {
+                    instances.get(j).setValue(current, measures.get(j).getSurroundingValues().get(i));
+                }
+            } else {
+                Properties properties = new Properties();
+                properties.setProperty("true", "true");
+                properties.setProperty("false", "false");
+                current = new Attribute("Attribute" + i, new ProtectedProperties(properties));
+                for (int j = 0; j < measures.size(); j++) {
+                    instances.get(j).setValue(current, Boolean.toString(measures.get(j).isVesselByExpert()));
+                }
+            }
+            atts.addElement(current);
+        }
+        Instances newDataset = new Instances("Dataset", atts, measures.size());
+        for (Instance instance : instances) {
+            newDataset.add(instance);
+        }
+        ArffSaver arffSaver = new ArffSaver();
+        arffSaver.setInstances(newDataset);
+        try {
+            arffSaver.setFile(new File("test.arff"));
+            arffSaver.writeBatch();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 
     @Override
