@@ -104,9 +104,9 @@ public class DataSetCreator extends Observable implements Runnable {
             Measure measure = new Measure(pointWidth, pointHeight, getValuesFromSquare(square), expertResult);
             measures.add(i, measure);
         }
-        //todo add balance measures array to equals vessels and background set
+        ArrayList<Measure> balancedMeasures = balanceDataSet(vesselsMeasure, backgroundMeasure, measures);
 
-        return measures;
+        return balancedMeasures;
     }
 
     private Mat cutSquareFromImage(int widthPosition, int heightPosition, Mat srcMat) {
@@ -126,6 +126,24 @@ public class DataSetCreator extends Observable implements Runnable {
             }
         }
         return values;
+    }
+
+    private ArrayList<Measure> balanceDataSet(int good, int bad, ArrayList<Measure> dataArray) {
+        ArrayList<Measure> balance = new ArrayList<>(2 * good);
+        int badCounter = 0;
+        for (int i = 0, j = 0; i < 2 * good; i++, j++) {
+            if (dataArray.get(j).isVesselByExpert()) {
+                balance.add(i, dataArray.get(j));
+            } else {
+                if (badCounter < good) {
+                    balance.add(i, dataArray.get(j));
+                    badCounter++;
+                } else {
+                    j++;
+                }
+            }
+        }
+        return balance;
     }
 
     @Override
