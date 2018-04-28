@@ -162,17 +162,11 @@ public class DataSetCreator extends Observable implements Runnable {
     private void saveDatasetAsARFF(ArrayList<Measure> measures, String relationName) {
         try {
             Writer writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(new File("test.arff"))));
-            writer.write("%\n" +
-                    "% As used by Kilpatrick, D. & Cameron-Jones, M. (1998). Numeric prediction\n" +
-                    "% using instance-based learning with encoding length selection. In Progress\n" +
-                    "% in Connectionist-Based Information Systems. Singapore: Springer-Verlag.\n" +
-                    "%\n" +
-                    "% Deleted \"vendor\" attribute to make data consistent with with what we\n" +
-                    "% used in the data mining book.\n" +
-                    "%\n");
+            writer.write("%\n");
+
             writer.write("@relation '" + relationName + "'\n");
             for (int i = 0; i < Math.pow(ODD_SQUARE_SIZE, 2); i++) {
-                writer.write("@attribute color_" + (i / 5) + "_" + (i % 5) + " real\n");
+                writer.write("@attribute color_" + (i / 5) + "_" + (i % 5) + " numeric\n");
             }
             writer.write("@attribute isVessel {" + Boolean.toString(true) + "," + Boolean.toString(false) + "}\n");
             writer.write("@data\n");

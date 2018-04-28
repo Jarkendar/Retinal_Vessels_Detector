@@ -29,7 +29,7 @@ public class Measure {
     public String getSurroundingValuesAsString() {
         StringBuilder stringBuilder = new StringBuilder();
         for (Double value : surroundingValues) {
-            stringBuilder.append(value).append(",");
+            stringBuilder.append(value.intValue()).append(",");
         }
         return stringBuilder.toString();
     }
