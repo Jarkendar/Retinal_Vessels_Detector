@@ -26,6 +26,14 @@ public class Measure {
         return surroundingValues;
     }
 
+    public String getSurroundingValuesAsString() {
+        StringBuilder stringBuilder = new StringBuilder();
+        for (Double value : surroundingValues) {
+            stringBuilder.append(value).append(",");
+        }
+        return stringBuilder.toString();
+    }
+
     public boolean isVesselByExpert() {
         return vesselByExpert;
     }

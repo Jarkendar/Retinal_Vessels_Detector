@@ -1,10 +1,13 @@
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 
 import java.io.File;
+import java.util.Observable;
+import java.util.Observer;
 
-public class Controller {
+public class Controller implements Observer {
     public Button imageButton;
     public Button expertButton;
     public Button areaButton;
@@ -70,8 +73,43 @@ public class Controller {
     }
 
     public void startPreparingOfDataSet(ActionEvent actionEvent) {
+        DataSetCreator dataSetCreator = new DataSetCreator(imageFile, expertFile, areaFile);
+        dataSetCreator.addObserver(this);
+        Thread thread = new Thread(dataSetCreator);
+        thread.start();
     }
 
     public void startLearnModel(ActionEvent actionEvent) {
+    }
+
+    @Override
+    public void update(Observable observable, Object argument) {
+        Platform.runLater(() -> {
+            if (observable instanceof DataSetCreator) {
+                String prefix = "Status: ";
+                String message = (String) argument;
+                switch (message) {
+                    case DataSetCreator.CREATE_MEASURES: {
+                        statusLabel.setText(prefix + DataSetCreator.CREATE_MEASURES);
+                        break;
+                    }
+                    case DataSetCreator.CREATE_ARFF_SET: {
+                        statusLabel.setText(prefix + DataSetCreator.CREATE_ARFF_SET);
+                        break;
+                    }
+                    case DataSetCreator.DONE: {
+                        statusLabel.setText(prefix + DataSetCreator.DONE);
+                        break;
+                    }
+                    case DataSetCreator.ERROR_MATRIX_SIZE_IS_INCORRECT: {
+                        statusLabel.setText(prefix + DataSetCreator.ERROR_MATRIX_SIZE_IS_INCORRECT);
+                        break;
+                    }
+                    default:
+                        statusLabel.setText(prefix + " Empty");
+                }
+            }
+        });
+
     }
 }

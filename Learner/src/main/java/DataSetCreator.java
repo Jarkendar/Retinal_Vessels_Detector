@@ -1,16 +1,18 @@
+import org.opencv.core.Core;
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
 import org.opencv.core.Rect;
 import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
-import weka.core.*;
-import weka.core.converters.ArffSaver;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.util.*;
 
 public class DataSetCreator extends Observable implements Runnable {
+
+    static {
+        System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
+    }
 
     public static final String ERROR_MATRIX_SIZE_IS_INCORRECT = "MATRIX_SIZE_IS_INCORRECT";
     public static final String CREATE_MEASURES = "CREATE_MEASURES";
@@ -33,6 +35,7 @@ public class DataSetCreator extends Observable implements Runnable {
     }
 
     private Mat readMatFromFile(File file) {
+        System.out.println(file.getPath());
         return Imgcodecs.imread(file.getPath());
     }
 
@@ -58,7 +61,7 @@ public class DataSetCreator extends Observable implements Runnable {
             notifyObservers(CREATE_MEASURES);
             ArrayList<Measure> measures = createMeasurements(NUMBER_OF_MEASURES);
             notifyObservers(CREATE_ARFF_SET);
-            saveDataSetAsARFF(measures);
+            saveDatasetAsARFF(measures, "dataset");
             notifyObservers(DONE);
         } else {
             System.out.println("Error incorrect sizes");
@@ -112,6 +115,7 @@ public class DataSetCreator extends Observable implements Runnable {
             Measure measure = new Measure(pointWidth, pointHeight, getValuesFromSquare(square), expertResult);
             measures.add(i, measure);
         }
+        System.out.println("good = " + vesselsMeasure + "; bad = " + backgroundMeasure);
         ArrayList<Measure> balancedMeasures = balanceDataSet(vesselsMeasure, backgroundMeasure, measures);
 
         return balancedMeasures;
@@ -119,10 +123,8 @@ public class DataSetCreator extends Observable implements Runnable {
 
     private Mat cutSquareFromImage(int widthPosition, int heightPosition, Mat srcMat) {
         int startWidthPosition = widthPosition - (ODD_SQUARE_SIZE / 2);
-        int endWidthPosition = widthPosition + (ODD_SQUARE_SIZE / 2);
         int startHeightPosition = heightPosition - (ODD_SQUARE_SIZE / 2);
-        int endHeightPosition = heightPosition + (ODD_SQUARE_SIZE / 2);
-        Rect square = new Rect(startHeightPosition, startWidthPosition, endHeightPosition, endWidthPosition);
+        Rect square = new Rect(startWidthPosition, startHeightPosition, ODD_SQUARE_SIZE, ODD_SQUARE_SIZE);
         return srcMat.submat(square);
     }
 
@@ -138,8 +140,10 @@ public class DataSetCreator extends Observable implements Runnable {
 
     private ArrayList<Measure> balanceDataSet(int good, int bad, ArrayList<Measure> dataArray) {
         ArrayList<Measure> balance = new ArrayList<>(2 * good);
+        System.out.println("good = " + good + "; size = " + balance.size() + "; input = " + dataArray.size());
         int badCounter = 0;
         for (int i = 0, j = 0; i < 2 * good; i++, j++) {
+            System.out.println(i + " " + j + " " + good + " " + badCounter);
             if (dataArray.get(j).isVesselByExpert()) {
                 balance.add(i, dataArray.get(j));
             } else {
@@ -147,51 +151,40 @@ public class DataSetCreator extends Observable implements Runnable {
                     balance.add(i, dataArray.get(j));
                     badCounter++;
                 } else {
-                    j++;
+                    i--;
                 }
             }
         }
         return balance;
     }
 
-    private void saveDataSetAsARFF(ArrayList<Measure> measures) {
-        FastVector atts = new FastVector();
-        List<Instance> instances = new ArrayList<Instance>();
-        for (int i = 0; i < Math.pow(ODD_SQUARE_SIZE, 2) + 1; i++) {
-            Attribute current = new Attribute("Attribute" + i);
-            if (i == 0) {
-                for (int j = 0; j < measures.size(); j++) {
-                    instances.add(new SparseInstance((int) Math.pow(ODD_SQUARE_SIZE, 2) + 1));
-                }
-            }
-            if (i != Math.pow(ODD_SQUARE_SIZE, 2)) {
-                for (int j = 0; j < measures.size(); j++) {
-                    instances.get(j).setValue(current, measures.get(j).getSurroundingValues().get(i));
-                }
-            } else {
-                Properties properties = new Properties();
-                properties.setProperty("true", "true");
-                properties.setProperty("false", "false");
-                current = new Attribute("Attribute" + i, new ProtectedProperties(properties));
-                for (int j = 0; j < measures.size(); j++) {
-                    instances.get(j).setValue(current, Boolean.toString(measures.get(j).isVesselByExpert()));
-                }
-            }
-            atts.addElement(current);
-        }
-        Instances newDataset = new Instances("Dataset", atts, measures.size());
-        for (Instance instance : instances) {
-            newDataset.add(instance);
-        }
-        ArffSaver arffSaver = new ArffSaver();
-        arffSaver.setInstances(newDataset);
+
+    private void saveDatasetAsARFF(ArrayList<Measure> measures, String relationName) {
         try {
-            arffSaver.setFile(new File("test.arff"));
-            arffSaver.writeBatch();
+            Writer writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(new File("test.arff"))));
+            writer.write("%\n" +
+                    "% As used by Kilpatrick, D. & Cameron-Jones, M. (1998). Numeric prediction\n" +
+                    "% using instance-based learning with encoding length selection. In Progress\n" +
+                    "% in Connectionist-Based Information Systems. Singapore: Springer-Verlag.\n" +
+                    "%\n" +
+                    "% Deleted \"vendor\" attribute to make data consistent with with what we\n" +
+                    "% used in the data mining book.\n" +
+                    "%\n");
+            writer.write("@relation '" + relationName + "'\n");
+            for (int i = 0; i < Math.pow(ODD_SQUARE_SIZE, 2); i++) {
+                writer.write("@attribute color_" + (i / 5) + "_" + (i % 5) + " real\n");
+            }
+            writer.write("@attribute isVessel {" + Boolean.toString(true) + "," + Boolean.toString(false) + "}\n");
+            writer.write("@data\n");
+            for (Measure measure : measures) {
+                writer.write(measure.getSurroundingValuesAsString());
+                writer.write(Boolean.toString(measure.isVesselByExpert()) + "\n");
+            }
+            writer.flush();
+            writer.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
-
     }
 
     @Override
