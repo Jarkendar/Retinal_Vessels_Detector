@@ -161,7 +161,7 @@ public class DataSetCreator extends Observable implements Runnable {
 
     private void saveDatasetAsARFF(ArrayList<Measure> measures, String relationName) {
         try {
-            Writer writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(new File("test.arff"))));
+            Writer writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(new File("dataset_"+ODD_SQUARE_SIZE+"_"+measures.size()+".arff"))));
             writer.write("%\n");
 
             writer.write("@relation '" + relationName + "'\n");
