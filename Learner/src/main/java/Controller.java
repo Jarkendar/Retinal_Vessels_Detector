@@ -1,10 +1,13 @@
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 
 import java.io.File;
+import java.util.Observable;
+import java.util.Observer;
 
-public class Controller {
+public class Controller implements Observer {
     public Button imageButton;
     public Button expertButton;
     public Button areaButton;
@@ -70,8 +73,81 @@ public class Controller {
     }
 
     public void startPreparingOfDataSet(ActionEvent actionEvent) {
+        DataSetCreator dataSetCreator = new DataSetCreator(imageFile, expertFile, areaFile);
+        dataSetCreator.addObserver(this);
+        Thread thread = new Thread(dataSetCreator);
+        thread.start();
     }
 
     public void startLearnModel(ActionEvent actionEvent) {
+        ClassifierCreator classifierCreator = new ClassifierCreator(arffFile);
+        Thread thread = new Thread(classifierCreator);
+        thread.start();
+    }
+
+    @Override
+    public void update(Observable observable, Object argument) {
+        if (observable instanceof DataSetCreator) {
+            setStatusLabelDataSetCreator((String) argument);
+        } else if (observable instanceof ClassifierCreator) {
+            setStatusLabelClassifierCreator((String) argument);
+        }
+    }
+
+    private void setStatusLabelDataSetCreator(String message) {
+        Platform.runLater(() -> {
+            String prefix = "Status: ";
+            switch (message) {
+                case DataSetCreator.CREATE_MEASURES: {
+                    statusLabel.setText(prefix + DataSetCreator.CREATE_MEASURES);
+                    break;
+                }
+                case DataSetCreator.CREATE_ARFF_SET: {
+                    statusLabel.setText(prefix + DataSetCreator.CREATE_ARFF_SET);
+                    break;
+                }
+                case DataSetCreator.DONE: {
+                    statusLabel.setText(prefix + DataSetCreator.DONE);
+                    break;
+                }
+                case DataSetCreator.ERROR_MATRIX_SIZE_IS_INCORRECT: {
+                    statusLabel.setText(prefix + DataSetCreator.ERROR_MATRIX_SIZE_IS_INCORRECT);
+                    break;
+                }
+                default:
+                    statusLabel.setText(prefix + " Empty");
+            }
+        });
+    }
+
+    private void setStatusLabelClassifierCreator(String message) {
+        Platform.runLater(() -> {
+            String prefix = "Status: ";
+            switch (message) {
+                case ClassifierCreator.RANDOMIZE_DATA_SET: {
+                    statusLabel.setText(prefix + ClassifierCreator.RANDOMIZE_DATA_SET);
+                    break;
+                }
+                case ClassifierCreator.BUILD_CLASSIFIER: {
+                    statusLabel.setText(prefix + ClassifierCreator.BUILD_CLASSIFIER);
+                    break;
+                }
+                case ClassifierCreator.CROSS_VALIDATE: {
+                    statusLabel.setText(prefix + ClassifierCreator.CROSS_VALIDATE);
+                    break;
+                }
+                case ClassifierCreator.SAVING_MODEL: {
+                    statusLabel.setText(prefix + ClassifierCreator.SAVING_MODEL);
+                    break;
+                }
+                case ClassifierCreator.DONE: {
+                    statusLabel.setText(prefix + ClassifierCreator.DONE);
+                    break;
+                }
+                default: {
+                    statusLabel.setText(prefix + " Empty");
+                }
+            }
+        });
     }
 }
