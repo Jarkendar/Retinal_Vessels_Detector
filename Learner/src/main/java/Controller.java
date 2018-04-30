@@ -81,6 +81,7 @@ public class Controller implements Observer {
 
     public void startLearnModel(ActionEvent actionEvent) {
         ClassifierCreator classifierCreator = new ClassifierCreator(arffFile);
+        classifierCreator.addObserver(this);
         Thread thread = new Thread(classifierCreator);
         thread.start();
     }

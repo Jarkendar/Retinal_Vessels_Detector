@@ -108,6 +108,9 @@ public class ClassifierImage extends Observable implements Runnable {
                 }
             }
         }
+        Mat median = new Mat();
+        Imgproc.medianBlur(outputImage, median, 9);
+        outputImage = median;
         System.out.println("time = "+(System.currentTimeMillis()-start));
         saveBitmap(outputImage, "classified");
         notifyObservers();

@@ -167,7 +167,7 @@ public class DataSetCreator extends Observable implements Runnable {
 
             writer.write("@relation '" + relationName + "'\n");
             for (int i = 0; i < Math.pow(ODD_SQUARE_SIZE, 2); i++) {
-                writer.write("@attribute color_" + (i / 5) + "_" + (i % 5) + " numeric\n");
+                writer.write("@attribute color_" + (i / ODD_SQUARE_SIZE) + "_" + (i % ODD_SQUARE_SIZE) + " numeric\n");
             }
             writer.write("@attribute isVessel {" + Boolean.toString(true) + "," + Boolean.toString(false) + "}\n");
             writer.write("@data\n");
@@ -190,7 +190,7 @@ public class DataSetCreator extends Observable implements Runnable {
 
             writer.write("@relation '" + relationName + "'\n");
             for (int i = 0; i < Math.pow(ODD_SQUARE_SIZE, 2); i++) {
-                writer.write("@attribute color_" + (i / 5) + "_" + (i % 5) + " numeric\n");
+                writer.write("@attribute color_" + (i / ODD_SQUARE_SIZE) + "_" + (i % ODD_SQUARE_SIZE) + " numeric\n");
             }
             writer.write("@attribute isVessel {" + Boolean.toString(true) + "," + Boolean.toString(false) + "}\n");
             writer.write("@data\n");

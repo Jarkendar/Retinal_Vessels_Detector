@@ -46,16 +46,21 @@ public class ClassifierCreator extends Observable implements Runnable {
     public void run() {
         notifyObservers(RANDOMIZE_DATA_SET);
         dataSet.randomize(new Random());
-        System.out.println(dataSet);
         try {
+            long start = System.currentTimeMillis();
             notifyObservers(BUILD_CLASSIFIER);
             Classifier classifier = new RandomForest();
             classifier.buildClassifier(dataSet);
+            System.out.println("Build = "+(System.currentTimeMillis()-start)+" ms");
+            start = System.currentTimeMillis();
             notifyObservers(CROSS_VALIDATE);
             Evaluation evaluation = new Evaluation(dataSet);
             evaluation.crossValidateModel(classifier, dataSet, 10, new Random());
+            System.out.println("CrossValidate = "+(System.currentTimeMillis()-start)+" ms");
+            start = System.currentTimeMillis();
             notifyObservers(SAVING_MODEL);
             SerializationHelper.write("RandomForest_"+(dataSet.numAttributes()-1)+"_"+dataSet.numInstances()+".model", classifier);
+            System.out.println("Saving = "+(System.currentTimeMillis()-start)+" ms");
             System.out.println(evaluation.toSummaryString("\nResults\n======\n", true));
             notifyObservers(DONE);
         } catch (Exception e) {
