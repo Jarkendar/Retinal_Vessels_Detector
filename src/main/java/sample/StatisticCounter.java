@@ -8,6 +8,8 @@ import java.util.LinkedList;
 import java.util.Observable;
 import java.util.Observer;
 
+//https://brain.fuw.edu.pl/edu/index.php/Uczenie_maszynowe_i_sztuczne_sieci_neuronowe/Wykład_Ocena_jakości_klasyfikacji
+
 public class StatisticCounter extends Observable implements Runnable {
 
     static {
@@ -23,15 +25,15 @@ public class StatisticCounter extends Observable implements Runnable {
     private Mat maskImage;
     private Mat expertImage;
 
-    private int tpFiltered = 0;
-    private int tnFiltered = 0;
-    private int fpFiltered = 0;
-    private int fnFiltered = 0;
+    private long tpFiltered = 0;
+    private long tnFiltered = 0;
+    private long fpFiltered = 0;
+    private long fnFiltered = 0;
 
-    private int tpClassified = 0;
-    private int tnClassified = 0;
-    private int fpClassified = 0;
-    private int fnClassified = 0;
+    private long tpClassified = 0;
+    private long tnClassified = 0;
+    private long fpClassified = 0;
+    private long fnClassified = 0;
 
     public StatisticCounter(Mat filteredImage, Mat classifiedImage, Mat maskImage, Mat expertImage) {
         this.filteredImage = filteredImage;
@@ -47,6 +49,8 @@ public class StatisticCounter extends Observable implements Runnable {
             for (int j = 0; j < maskImage.width(); j++) {
                 if (maskImage.get(i, j)[0] != 0) {
                     double expertColor = expertImage.get(i, j)[0];
+                    if (expertColor != WHITE && expertColor != BLACK)
+                    System.out.println(expertColor);
                     checkFilteredImage(expertColor, i, j);
                     checkClassifiedImage(expertColor, i, j);
                 }
@@ -61,13 +65,13 @@ public class StatisticCounter extends Observable implements Runnable {
             if (expertColor == WHITE) {
                 tpFiltered++;
             } else if (expertColor == BLACK) {
-                fnFiltered++;
+                tnFiltered++;
             }
         } else {
             if (expertColor == WHITE) {
                 fpFiltered++;
             } else if (expertColor == BLACK) {
-                tnFiltered++;
+                fnFiltered++;
             }
         }
     }
@@ -77,46 +81,46 @@ public class StatisticCounter extends Observable implements Runnable {
             if (expertColor == WHITE) {
                 tpClassified++;
             } else if (expertColor == BLACK) {
-                fnClassified++;
+                tnClassified++;
             }
         } else {
             if (expertColor == WHITE) {
                 fpClassified++;
             } else if (expertColor == BLACK) {
-                tnClassified++;
+                fnClassified++;
             }
         }
     }
 
-    public int getTpFiltered() {
+    public long getTpFiltered() {
         return tpFiltered;
     }
 
-    public int getTnFiltered() {
+    public long getTnFiltered() {
         return tnFiltered;
     }
 
-    public int getFpFiltered() {
+    public long getFpFiltered() {
         return fpFiltered;
     }
 
-    public int getFnFiltered() {
+    public long getFnFiltered() {
         return fnFiltered;
     }
 
-    public int getTpClassified() {
+    public long getTpClassified() {
         return tpClassified;
     }
 
-    public int getTnClassified() {
+    public long getTnClassified() {
         return tnClassified;
     }
 
-    public int getFpClassified() {
+    public long getFpClassified() {
         return fpClassified;
     }
 
-    public int getFnClassified() {
+    public long getFnClassified() {
         return fnClassified;
     }
 
@@ -144,6 +148,12 @@ public class StatisticCounter extends Observable implements Runnable {
         return decimalFormat.format(result);
     }
 
+    public String getFilteredMatthews(){
+        double result = ((double)(tpFiltered*tnFiltered)-(double)(fpFiltered*fnFiltered))/(Math.sqrt((double) (tpFiltered+fpFiltered)*(double) (tpFiltered+fnFiltered)*(double) (tnFiltered+fpFiltered)*(double) (tnFiltered+fnFiltered)));
+        DecimalFormat decimalFormat = new DecimalFormat("#.##");
+        return decimalFormat.format(result);
+    }
+
     public String getClassifiedPrecission(){
         double result = (double) tpClassified / (double)(tpClassified+fpClassified);
         DecimalFormat decimalFormat = new DecimalFormat("#.##");
@@ -164,6 +174,12 @@ public class StatisticCounter extends Observable implements Runnable {
 
     public String getClassifiedAccuracy(){
         double result = (double) (tpClassified+tnClassified) / (double)(tpClassified+tnClassified+fpClassified+fnClassified);
+        DecimalFormat decimalFormat = new DecimalFormat("#.##");
+        return decimalFormat.format(result);
+    }
+
+    public String getClassifiedMatthews(){
+        double result = ((double)(tpClassified*tnClassified)-(double)(fpClassified*fnClassified))/(Math.sqrt((double) (tpClassified+fpClassified)*(double) (tpClassified+fnClassified)*(double) (tnClassified+fpClassified)*(double) (tnClassified+fnClassified)));
         DecimalFormat decimalFormat = new DecimalFormat("#.##");
         return decimalFormat.format(result);
     }

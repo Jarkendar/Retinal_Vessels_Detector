@@ -37,11 +37,13 @@ public class Controller implements Observer {
     public Label filtrRecall;
     public Label filtrSpecificity;
     public Label filtrAccuracy;
+    public Label filtrMatthews;
 
     public Label classPrecision;
     public Label classRecall;
     public Label classSpecificity;
     public Label classAccuracy;
+    public Label classMathhews;
 
     public GridPane trueFalseGrid;
     public GridPane statisticGrid;
@@ -149,10 +151,12 @@ public class Controller implements Observer {
             filtrRecall.setText(statisticCounter.getFilteredRecall());
             filtrSpecificity.setText(statisticCounter.getFilteredSpecificity());
             filtrAccuracy.setText(statisticCounter.getFilteredAccuracy());
+            filtrMatthews.setText(statisticCounter.getFilteredMatthews());
             classPrecision.setText(statisticCounter.getClassifiedPrecission());
             classRecall.setText(statisticCounter.getClassifiedRecall());
             classSpecificity.setText(statisticCounter.getClassifiedSpecificity());
             classAccuracy.setText(statisticCounter.getClassifiedAccuracy());
+            classMathhews.setText(statisticCounter.getClassifiedMatthews());
         });
     }
 

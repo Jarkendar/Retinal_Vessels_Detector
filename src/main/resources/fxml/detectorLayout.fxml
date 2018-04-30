@@ -72,6 +72,7 @@
                 <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
                 <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
                 <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
             </rowConstraints>
             <children>
                 <Label text="Filtered" textAlignment="CENTER" wrapText="true" GridPane.columnIndex="1" />
@@ -80,6 +81,7 @@
                 <Label text="RECALL" textAlignment="CENTER" wrapText="true" GridPane.rowIndex="2" />
                 <Label text="SPECIFICITY" textAlignment="CENTER" wrapText="true" GridPane.rowIndex="3" />
                 <Label text="ACCURACY" textAlignment="CENTER" wrapText="true" GridPane.rowIndex="4" />
+                <Label text="MATTHEWS" textAlignment="CENTER" wrapText="true" GridPane.rowIndex="5" />
                 <Label fx:id="filtrPrecision" text="0" textAlignment="CENTER" wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                 <Label fx:id="classPrecision" text="0" textAlignment="CENTER" wrapText="true" GridPane.columnIndex="2" GridPane.rowIndex="1" />
                 <Label fx:id="filtrRecall" text="0" textAlignment="CENTER" wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="2" />
@@ -88,6 +90,8 @@
                 <Label fx:id="classSpecificity" text="0" textAlignment="CENTER" wrapText="true" GridPane.columnIndex="2" GridPane.rowIndex="3" />
                 <Label fx:id="filtrAccuracy" text="0" textAlignment="CENTER" wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="4" />
                 <Label fx:id="classAccuracy" text="0" textAlignment="CENTER" wrapText="true" GridPane.columnIndex="2" GridPane.rowIndex="4" />
+                <Label fx:id="filtrMatthews" text="0" textAlignment="CENTER" wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+                <Label fx:id="classMathhews" text="0" textAlignment="CENTER" wrapText="true" GridPane.columnIndex="2" GridPane.rowIndex="5" />
             </children>
         </GridPane>
     </AnchorPane>
