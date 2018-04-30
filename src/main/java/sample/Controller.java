@@ -4,7 +4,10 @@ package sample;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
+import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.GridPane;
 
 import java.io.File;
 import java.util.Observable;
@@ -23,12 +26,39 @@ public class Controller implements Observer {
     public Button chooseFileModelButton;
     public Button chooseFileDataSetButton;
     public Button chooseFileMaskButton;
+    public CheckBox switchCheckBox;
+
+
+    public Label tt;
+    public Label tf;
+    public Label ft;
+    public Label ff;
+
+    public Label filtrPrecision;
+    public Label filtrRecall;
+    public Label filtrSensitivity;
+    public Label filtrAccuracy;
+
+    public Label classPrecision;
+    public Label classRecall;
+    public Label classSensitivity;
+    public Label classAccuracy;
+
+    public GridPane trueFalseGrid;
+    public GridPane statisticGrid;
 
     private File fileImage;
     private File fileExpertMask;
     private File fileMask;
     private File fileModel;
     private File fileDataSet;
+
+    public void initialize(){
+        switchCheckBox.selectedProperty().addListener((observable, oldValue, newValue) -> {
+            trueFalseGrid.setVisible(!trueFalseGrid.isVisible());
+            statisticGrid.setVisible(!statisticGrid.isVisible());
+        });
+    }
 
     public void clickChooseFileImege(ActionEvent actionEvent) {
         fileImage = Main.openFileChooser();
