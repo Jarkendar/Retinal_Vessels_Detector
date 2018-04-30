@@ -45,8 +45,9 @@
         </LineChart>
         <Button fx:id="chooseFileImageButton" layoutX="614.0" layoutY="14.0" mnemonicParsing="false" onAction="#clickChooseFileImege" prefHeight="26.0" prefWidth="278.0" text="Choose file image" />
         <Button fx:id="chooseFileExpertButton" layoutX="614.0" layoutY="44.0" mnemonicParsing="false" onAction="#clickChooseFileExpert" prefHeight="26.0" prefWidth="278.0" text="Choose expert mask" />
-        <Button fx:id="chooseFileModelButton" layoutX="614.0" layoutY="74.0" mnemonicParsing="false" onAction="#clickChooseFileModel" prefHeight="26.0" prefWidth="278.0" text="Choose model file" />
-        <Button fx:id="chooseFileDataSetButton" layoutX="614.0" layoutY="104.0" mnemonicParsing="false" onAction="#clickChooseFileDataSet" prefHeight="26.0" prefWidth="278.0" text="Choose dataset file" />
+        <Button fx:id="chooseFileMaskButton" layoutX="614.0" layoutY="74.0" mnemonicParsing="false" onAction="#clickChooseFileMask" prefHeight="26.0" prefWidth="278.0" text="Choose mask" />
+        <Button fx:id="chooseFileModelButton" layoutX="614.0" layoutY="104.0" mnemonicParsing="false" onAction="#clickChooseFileModel" prefHeight="26.0" prefWidth="278.0" text="Choose model file" />
+        <Button fx:id="chooseFileDataSetButton" layoutX="614.0" layoutY="134.0" mnemonicParsing="false" onAction="#clickChooseFileDataSet" prefHeight="26.0" prefWidth="278.0" text="Choose skeleton.arff file" />
         <Button fx:id="startButton" disable="true" layoutX="736.0" layoutY="436.0" mnemonicParsing="false" onAction="#clickStartButton" prefHeight="150.0" prefWidth="150.0" text="START" />
     </AnchorPane>
 </GridPane>

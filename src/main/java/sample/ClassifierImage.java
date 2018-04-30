@@ -27,13 +27,15 @@ public class ClassifierImage extends Observable implements Runnable {
     private static final int ODD_SQUARE_SIZE = 5;
     private LinkedList<Observer> observers = new LinkedList<>();
     private Mat inputImage;
+    private Mat maskImage;
     private Mat outputImage;
     private Classifier classifier;
     private Instances instances;
 
 
-    public ClassifierImage(Mat image, File modelFile, File instancesFile) {
+    public ClassifierImage(Mat image, File modelFile, File instancesFile, Mat mask) {
         inputImage = preprocesingFiltering(addEmptyRowsAboveAndBelowMat(image));
+        maskImage = addEmptyRowsAboveAndBelowMat(mask);
         outputImage = new Mat(inputImage.rows() - 2 * ODD_SQUARE_SIZE, inputImage.cols(), inputImage.type());
         try {
             classifier = (Classifier) SerializationHelper.read(modelFile.getPath());
@@ -58,14 +60,12 @@ public class ClassifierImage extends Observable implements Runnable {
 
 
     private Mat addEmptyRowsAboveAndBelowMat(Mat mat) {
-        System.out.println("Matrix size before" + mat.width() + " " + mat.height());
         int width = mat.width();
         Mat tmp = new Mat(ODD_SQUARE_SIZE, width, mat.type());
         Mat biggerMat = new Mat();
         biggerMat.push_back(tmp);
         biggerMat.push_back(mat);
         biggerMat.push_back(tmp);
-        System.out.println("Matrix size after" + biggerMat.width() + " " + biggerMat.height());
         return biggerMat;
     }
 
@@ -90,17 +90,21 @@ public class ClassifierImage extends Observable implements Runnable {
         long start = System.currentTimeMillis();
         for (int i = ODD_SQUARE_SIZE; i < inputImage.rows() - ODD_SQUARE_SIZE; i++) {
             for (int j = ODD_SQUARE_SIZE; j < inputImage.cols() - ODD_SQUARE_SIZE; j++) {
-                Mat surroundingSquare = cutSquareFromImage(j, i, inputImage);
-                Instance instance = createInstanceFromMat(surroundingSquare);
-                try {
-                    double[] clsLabel = classifier.distributionForInstance(instance);
-                    if (clsLabel[0] > clsLabel[1]) {
-                        outputImage.put(i, j, 255.0);
-                    } else {
-                        outputImage.put(i, j, 0.0);
+                if (maskImage.get(i,j)[0] != 0.0) {
+                    Mat surroundingSquare = cutSquareFromImage(j, i, inputImage);
+                    Instance instance = createInstanceFromMat(surroundingSquare);
+                    try {
+                        double[] clsLabel = classifier.distributionForInstance(instance);
+                        if (clsLabel[0] > clsLabel[1]) {
+                            outputImage.put(i, j, 255.0);
+                        } else {
+                            outputImage.put(i, j, 0.0);
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
-                } catch (Exception e) {
-                    e.printStackTrace();
+                }else {
+                    outputImage.put(i,j,0.0);
                 }
             }
         }

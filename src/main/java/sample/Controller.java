@@ -22,9 +22,11 @@ public class Controller implements Observer {
     public ImageView machineLearningOutput;
     public Button chooseFileModelButton;
     public Button chooseFileDataSetButton;
+    public Button chooseFileMaskButton;
 
     private File fileImage;
     private File fileExpertMask;
+    private File fileMask;
     private File fileModel;
     private File fileDataSet;
 
@@ -48,8 +50,13 @@ public class Controller implements Observer {
         checkFile(fileExpertMask);
     }
 
+    public void clickChooseFileMask(ActionEvent actionEvent) {
+        fileMask = Main.openFileChooser();
+        checkFile(fileMask);
+    }
+
     private boolean checkFileExist() {
-        return fileImage != null && fileExpertMask != null && fileModel != null && fileDataSet != null;
+        return fileImage != null && fileExpertMask != null && fileMask != null && fileModel != null && fileDataSet != null;
     }
 
     private void checkFile(File file) {
@@ -64,7 +71,7 @@ public class Controller implements Observer {
         FilterImage filterImage = new FilterImage(new FileManager().readImage(fileImage));
         filterImage.addObserver(this);
         new Thread(filterImage).start();
-        ClassifierImage classifierImage = new ClassifierImage(new FileManager().readImage(fileImage), fileModel, fileDataSet);
+        ClassifierImage classifierImage = new ClassifierImage(new FileManager().readImage(fileImage), fileModel, fileDataSet, new FileManager().readImage(fileMask));
         classifierImage.addObserver(this);
         new Thread(classifierImage).start();
     }
@@ -73,17 +80,17 @@ public class Controller implements Observer {
     public void update(Observable observable, Object arg) {
         if (observable instanceof FilterImage) {
             filteringOutput.setImage(new FileManager().convertMatToImage(((FilterImage) observable).getOutputBitmap()));
-        }else if(observable instanceof ClassifierImage){
+        } else if (observable instanceof ClassifierImage) {
             machineLearningOutput.setImage(new FileManager().convertMatToImage(((ClassifierImage) observable).getOutputImage()));
         }
     }
 
     public void clickChooseFileModel(ActionEvent actionEvent) {
         fileModel = Main.openFileChooser();
-        if (fileModel != null && getFileExtension(fileModel).equals("model")){
+        if (fileModel != null && getFileExtension(fileModel).equals("model")) {
             chooseFileModelButton.setText(fileModel.getName());
             startButton.setDisable(!checkFileExist());
-        }else {
+        } else {
             chooseFileModelButton.setText("Choose model file");
             startButton.setDisable(checkFileExist());
         }
@@ -101,12 +108,14 @@ public class Controller implements Observer {
 
     public void clickChooseFileDataSet(ActionEvent actionEvent) {
         fileDataSet = Main.openFileChooser();
-        if (fileDataSet != null && getFileExtension(fileDataSet).equals("arff")){
+        if (fileDataSet != null && getFileExtension(fileDataSet).equals("arff")) {
             chooseFileDataSetButton.setText(fileDataSet.getName());
             startButton.setDisable(!checkFileExist());
-        }else {
+        } else {
             chooseFileDataSetButton.setText("Choose model file");
             startButton.setDisable(checkFileExist());
         }
     }
+
+
 }
