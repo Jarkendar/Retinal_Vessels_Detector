@@ -1,5 +1,6 @@
 import weka.classifiers.Classifier;
 import weka.classifiers.Evaluation;
+import weka.classifiers.functions.MultilayerPerceptron;
 import weka.classifiers.trees.RandomForest;
 import weka.core.Instances;
 import weka.core.SerializationHelper;
@@ -49,7 +50,11 @@ public class ClassifierCreator extends Observable implements Runnable {
         try {
             long start = System.currentTimeMillis();
             notifyObservers(BUILD_CLASSIFIER);
-            Classifier classifier = new RandomForest();
+            MultilayerPerceptron classifier = new MultilayerPerceptron();
+            classifier.setLearningRate(0.1);
+            classifier.setMomentum(0.2);
+            classifier.setTrainingTime(2000);
+            classifier.setHiddenLayers("3");
             classifier.buildClassifier(dataSet);
             System.out.println("Build = "+(System.currentTimeMillis()-start)+" ms");
             start = System.currentTimeMillis();
@@ -59,7 +64,7 @@ public class ClassifierCreator extends Observable implements Runnable {
             System.out.println("CrossValidate = "+(System.currentTimeMillis()-start)+" ms");
             start = System.currentTimeMillis();
             notifyObservers(SAVING_MODEL);
-            SerializationHelper.write("RandomForest_"+(dataSet.numAttributes()-1)+"_"+dataSet.numInstances()+".model", classifier);
+            SerializationHelper.write("MultilayerPerceptron_"+(dataSet.numAttributes()-1)+"_"+dataSet.numInstances()+".model", classifier);
             System.out.println("Saving = "+(System.currentTimeMillis()-start)+" ms");
             System.out.println(evaluation.toSummaryString("\nResults\n======\n", true));
             notifyObservers(DONE);

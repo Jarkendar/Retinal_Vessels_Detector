@@ -124,7 +124,7 @@ public class ClassifierImage extends Observable implements Runnable {
     }
 
     private Instance createInstanceFromMat(Mat square) {
-        Instance instance = new Instance((int) Math.pow(ODD_SQUARE_SIZE, 2));
+        Instance instance = new Instance((int) Math.pow(ODD_SQUARE_SIZE, 2)+1);
         instance.setDataset(instances);
         for (int i = 0; i < square.width(); i++) {
             for (int j = 0; j < square.height(); j++) {

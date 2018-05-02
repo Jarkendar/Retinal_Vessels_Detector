@@ -55,9 +55,9 @@
                 <Label text="TRUE" textAlignment="CENTER" wrapText="true" GridPane.rowIndex="1" />
                 <Label text="FALSE" textAlignment="CENTER" wrapText="true" GridPane.rowIndex="2" />
                 <Label fx:id="tp" text="0 / 0" textAlignment="CENTER" wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                <Label fx:id="tn" text="0 / 0" textAlignment="CENTER" wrapText="true" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                <Label fx:id="fn" text="0 / 0" textAlignment="CENTER" wrapText="true" GridPane.columnIndex="2" GridPane.rowIndex="1" />
                 <Label fx:id="fp" text="0 / 0" textAlignment="CENTER" wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                <Label fx:id="fn" text="0 / 0" textAlignment="CENTER" wrapText="true" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+                <Label fx:id="tn" text="0 / 0" textAlignment="CENTER" wrapText="true" GridPane.columnIndex="2" GridPane.rowIndex="2" />
             </children>
         </GridPane>
         <GridPane fx:id="statisticGrid" gridLinesVisible="true" layoutX="614.0" layoutY="168.0" prefHeight="250.0" prefWidth="278.0" visible="false">
