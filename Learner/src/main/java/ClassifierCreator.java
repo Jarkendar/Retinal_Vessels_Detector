@@ -15,7 +15,6 @@ import java.util.Random;
 
 public class ClassifierCreator extends Observable implements Runnable {
 
-    private static final int TRAINING_SET_PERCENT_SIZE = 70;
     public static final String RANDOMIZE_DATA_SET = "RANDOMIZE_DATA_SET";
     public static final String BUILD_CLASSIFIER = "BUILD_CLASSIFIER";
     public static final String CROSS_VALIDATE = "CROSS_VALIDATE";
@@ -53,19 +52,19 @@ public class ClassifierCreator extends Observable implements Runnable {
             MultilayerPerceptron classifier = new MultilayerPerceptron();
             classifier.setLearningRate(0.1);
             classifier.setMomentum(0.2);
-            classifier.setTrainingTime(2000);
+            classifier.setTrainingTime(5000);
             classifier.setHiddenLayers("3");
             classifier.buildClassifier(dataSet);
             System.out.println("Build = "+(System.currentTimeMillis()-start)+" ms");
+            start = System.currentTimeMillis();
+            notifyObservers(SAVING_MODEL);
+            SerializationHelper.write("MultilayerPerceptron_"+(dataSet.numAttributes()-1)+"_"+dataSet.numInstances()+".model", classifier);
+            System.out.println("Saving = "+(System.currentTimeMillis()-start)+" ms");
             start = System.currentTimeMillis();
             notifyObservers(CROSS_VALIDATE);
             Evaluation evaluation = new Evaluation(dataSet);
             evaluation.crossValidateModel(classifier, dataSet, 10, new Random());
             System.out.println("CrossValidate = "+(System.currentTimeMillis()-start)+" ms");
-            start = System.currentTimeMillis();
-            notifyObservers(SAVING_MODEL);
-            SerializationHelper.write("MultilayerPerceptron_"+(dataSet.numAttributes()-1)+"_"+dataSet.numInstances()+".model", classifier);
-            System.out.println("Saving = "+(System.currentTimeMillis()-start)+" ms");
             System.out.println(evaluation.toSummaryString("\nResults\n======\n", true));
             notifyObservers(DONE);
         } catch (Exception e) {

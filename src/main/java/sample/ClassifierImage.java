@@ -96,9 +96,9 @@ public class ClassifierImage extends Observable implements Runnable {
                     try {
                         double[] clsLabel = classifier.distributionForInstance(instance);
                         if (clsLabel[0] > clsLabel[1]) {
-                            outputImage.put(i, j, 255.0);
+                            outputImage.put(i-ODD_SQUARE_SIZE, j, 255.0);
                         } else {
-                            outputImage.put(i, j, 0.0);
+                            outputImage.put(i-ODD_SQUARE_SIZE, j, 0.0);
                         }
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -108,6 +108,7 @@ public class ClassifierImage extends Observable implements Runnable {
                 }
             }
         }
+        saveBitmap(outputImage, "classified_without_medianBlur");
         Mat median = new Mat();
         Imgproc.medianBlur(outputImage, median, 9);
         outputImage = median;
