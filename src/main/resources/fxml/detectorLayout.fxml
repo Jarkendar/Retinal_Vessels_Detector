@@ -1,13 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.chart.LineChart?>
-<?import javafx.scene.chart.NumberAxis?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ProgressBar?>
-<?import javafx.scene.control.Slider?>
-<?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -15,7 +10,7 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
 
-<GridPane alignment="center" hgap="10" vgap="10" xmlns="http://javafx.com/javafx/8.0.161" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller">
+<GridPane alignment="center" hgap="10" vgap="10" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller">
     <columnConstraints>
         <ColumnConstraints />
     </columnConstraints>
@@ -35,16 +30,69 @@
         <ImageView fx:id="machineLearningOutput" fitHeight="278.0" fitWidth="278.0" layoutX="314.0" layoutY="314.0" pickOnBounds="true" preserveRatio="true">
             <Image url="@../images/defaultBackGround.png" />
         </ImageView>
-        <LineChart fx:id="lineChart" layoutX="14.0" layoutY="14.0" prefHeight="578.0" prefWidth="578.0" title="Root Mean Square Error" visible="false">
-            <xAxis>
-                <NumberAxis fx:id="lineChartXAxis" side="BOTTOM" />
-            </xAxis>
-            <yAxis>
-                <NumberAxis fx:id="lineChartYAxis" side="LEFT" />
-            </yAxis>
-        </LineChart>
-        <Button fx:id="chooseFileImageButton" layoutX="614.0" layoutY="14.0" mnemonicParsing="false" onAction="#clickChooseFileImege" prefHeight="26.0" prefWidth="278.0" text="Choose File Image" />
-        <Button fx:id="chooseFileExpertButton" layoutX="614.0" layoutY="44.0" mnemonicParsing="false" onAction="#clickChooseFileExpert" prefHeight="26.0" prefWidth="278.0" text="Choose Expert Mask" />
+        <Button fx:id="chooseFileImageButton" layoutX="614.0" layoutY="14.0" mnemonicParsing="false" onAction="#clickChooseFileImege" prefHeight="26.0" prefWidth="278.0" text="Choose file image" />
+        <Button fx:id="chooseFileExpertButton" layoutX="614.0" layoutY="44.0" mnemonicParsing="false" onAction="#clickChooseFileExpert" prefHeight="26.0" prefWidth="278.0" text="Choose expert mask" />
+        <Button fx:id="chooseFileMaskButton" layoutX="614.0" layoutY="74.0" mnemonicParsing="false" onAction="#clickChooseFileMask" prefHeight="26.0" prefWidth="278.0" text="Choose mask" />
+        <Button fx:id="chooseFileModelButton" layoutX="614.0" layoutY="104.0" mnemonicParsing="false" onAction="#clickChooseFileModel" prefHeight="26.0" prefWidth="278.0" text="Choose model file" />
+        <Button fx:id="chooseFileDataSetButton" layoutX="614.0" layoutY="134.0" mnemonicParsing="false" onAction="#clickChooseFileDataSet" prefHeight="26.0" prefWidth="278.0" text="Choose skeleton.arff file" />
         <Button fx:id="startButton" disable="true" layoutX="736.0" layoutY="436.0" mnemonicParsing="false" onAction="#clickStartButton" prefHeight="150.0" prefWidth="150.0" text="START" />
+        <CheckBox fx:id="switchCheckBox" layoutX="614.0" layoutY="436.0" mnemonicParsing="false" text="Statistic" />
+        <GridPane fx:id="trueFalseGrid" gridLinesVisible="true" layoutX="614.0" layoutY="168.0" prefHeight="188.0" prefWidth="278.0">
+            <columnConstraints>
+                <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+            </columnConstraints>
+            <rowConstraints>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
+            </rowConstraints>
+            <children>
+                <Label text="Filtered / Classified" textAlignment="CENTER" wrapText="true" />
+                <Label text="POSITIVE" textAlignment="CENTER" wrapText="true" GridPane.columnIndex="1" />
+                <Label text="NEGATIVE" textAlignment="CENTER" wrapText="true" GridPane.columnIndex="2" />
+                <Label text="TRUE" textAlignment="CENTER" wrapText="true" GridPane.rowIndex="1" />
+                <Label text="FALSE" textAlignment="CENTER" wrapText="true" GridPane.rowIndex="2" />
+                <Label fx:id="tp" text="0 / 0" textAlignment="CENTER" wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                <Label fx:id="fn" text="0 / 0" textAlignment="CENTER" wrapText="true" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                <Label fx:id="fp" text="0 / 0" textAlignment="CENTER" wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                <Label fx:id="tn" text="0 / 0" textAlignment="CENTER" wrapText="true" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+            </children>
+        </GridPane>
+        <GridPane fx:id="statisticGrid" gridLinesVisible="true" layoutX="614.0" layoutY="168.0" prefHeight="250.0" prefWidth="278.0" visible="false">
+            <columnConstraints>
+                <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+            </columnConstraints>
+            <rowConstraints>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
+            </rowConstraints>
+            <children>
+                <Label text="Filtered" textAlignment="CENTER" wrapText="true" GridPane.columnIndex="1" />
+                <Label text="Classified" textAlignment="CENTER" wrapText="true" GridPane.columnIndex="2" />
+                <Label text="PRECISION" textAlignment="CENTER" wrapText="true" GridPane.rowIndex="1" />
+                <Label text="RECALL" textAlignment="CENTER" wrapText="true" GridPane.rowIndex="2" />
+                <Label text="SPECIFICITY" textAlignment="CENTER" wrapText="true" GridPane.rowIndex="3" />
+                <Label text="ACCURACY" textAlignment="CENTER" wrapText="true" GridPane.rowIndex="4" />
+                <Label text="MATTHEWS" textAlignment="CENTER" wrapText="true" GridPane.rowIndex="5" />
+                <Label fx:id="filtrPrecision" text="0" textAlignment="CENTER" wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                <Label fx:id="classPrecision" text="0" textAlignment="CENTER" wrapText="true" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                <Label fx:id="filtrRecall" text="0" textAlignment="CENTER" wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                <Label fx:id="classRecall" text="0" textAlignment="CENTER" wrapText="true" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+                <Label fx:id="filtrSpecificity" text="0" textAlignment="CENTER" wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                <Label fx:id="classSpecificity" text="0" textAlignment="CENTER" wrapText="true" GridPane.columnIndex="2" GridPane.rowIndex="3" />
+                <Label fx:id="filtrAccuracy" text="0" textAlignment="CENTER" wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                <Label fx:id="classAccuracy" text="0" textAlignment="CENTER" wrapText="true" GridPane.columnIndex="2" GridPane.rowIndex="4" />
+                <Label fx:id="filtrMatthews" text="0" textAlignment="CENTER" wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+                <Label fx:id="classMathhews" text="0" textAlignment="CENTER" wrapText="true" GridPane.columnIndex="2" GridPane.rowIndex="5" />
+            </children>
+        </GridPane>
     </AnchorPane>
 </GridPane>

@@ -38,12 +38,12 @@ public class FilterImage extends Observable implements Runnable {
         Mat kernel = Imgproc.getStructuringElement(Imgproc.MORPH_ELLIPSE, new Size(3, 3));
         Imgproc.dilate(canny, dilate, kernel);
         Mat median = new Mat();
-        Imgproc.medianBlur(dilate, median, 3);
+        Imgproc.medianBlur(dilate, median, 5);
         dilate = new Mat();
         kernel = Imgproc.getStructuringElement(Imgproc.MORPH_ELLIPSE, new Size(9, 9));
-        Imgproc.dilate(canny, dilate, kernel);
+        Imgproc.dilate(median, dilate, kernel);
         outputBitmap = dilate;
-        saveBitmap(outputBitmap, "out");
+        saveBitmap(outputBitmap, "filtered");
         notifyObservers();
     }
 

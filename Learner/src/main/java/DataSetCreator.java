@@ -61,6 +61,7 @@ public class DataSetCreator extends Observable implements Runnable {
             notifyObservers(CREATE_MEASURES);
             ArrayList<Measure> measures = createMeasurements(NUMBER_OF_MEASURES);
             notifyObservers(CREATE_ARFF_SET);
+            saveDatasetSkeleton("dataset");
             saveDatasetAsARFF(measures, "dataset");
             notifyObservers(DONE);
         } else {
@@ -161,12 +162,12 @@ public class DataSetCreator extends Observable implements Runnable {
 
     private void saveDatasetAsARFF(ArrayList<Measure> measures, String relationName) {
         try {
-            Writer writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(new File("dataset_"+ODD_SQUARE_SIZE+"_"+measures.size()+".arff"))));
+            Writer writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(new File("dataset_" + ODD_SQUARE_SIZE + "_" + measures.size() + ".arff"))));
             writer.write("%\n");
 
             writer.write("@relation '" + relationName + "'\n");
             for (int i = 0; i < Math.pow(ODD_SQUARE_SIZE, 2); i++) {
-                writer.write("@attribute color_" + (i / 5) + "_" + (i % 5) + " numeric\n");
+                writer.write("@attribute color_" + (i / ODD_SQUARE_SIZE) + "_" + (i % ODD_SQUARE_SIZE) + " numeric\n");
             }
             writer.write("@attribute isVessel {" + Boolean.toString(true) + "," + Boolean.toString(false) + "}\n");
             writer.write("@data\n");
@@ -174,6 +175,25 @@ public class DataSetCreator extends Observable implements Runnable {
                 writer.write(measure.getSurroundingValuesAsString());
                 writer.write(Boolean.toString(measure.isVesselByExpert()) + "\n");
             }
+            writer.flush();
+            writer.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void saveDatasetSkeleton(String relationName) {
+        Writer writer = null;
+        try {
+            writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(new File("skeleton_square_size_" + ((int) Math.pow(ODD_SQUARE_SIZE, 2)) + ".arff"))));
+            writer.write("%\n");
+
+            writer.write("@relation '" + relationName + "'\n");
+            for (int i = 0; i < Math.pow(ODD_SQUARE_SIZE, 2); i++) {
+                writer.write("@attribute color_" + (i / ODD_SQUARE_SIZE) + "_" + (i % ODD_SQUARE_SIZE) + " numeric\n");
+            }
+            writer.write("@attribute isVessel {" + Boolean.toString(true) + "," + Boolean.toString(false) + "}\n");
+            writer.write("@data\n");
             writer.flush();
             writer.close();
         } catch (IOException e) {

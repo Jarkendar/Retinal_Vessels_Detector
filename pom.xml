@@ -8,6 +8,14 @@
     <artifactId>Retinal_Vessels_Detector</artifactId>
     <version>1.0-SNAPSHOT</version>
 
+    <dependencies>
+        <dependency>
+            <groupId>nz.ac.waikato.cms.weka</groupId>
+            <artifactId>weka-stable</artifactId>
+            <version>3.8.0</version>
+        </dependency>
+    </dependencies>
+
     <build>
         <plugins>
             <plugin>
