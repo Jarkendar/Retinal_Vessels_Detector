@@ -124,7 +124,7 @@ public class StatisticCounter extends Observable implements Runnable {
         return fnClassified;
     }
 
-    public String getFilteredPrecission(){
+    public String getFilteredPrecision(){
         double result = (double) tpFiltered / (double)(tpFiltered+fpFiltered);
         DecimalFormat decimalFormat = new DecimalFormat("#.##");
         return decimalFormat.format(result);

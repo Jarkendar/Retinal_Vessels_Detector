@@ -147,7 +147,7 @@ public class Controller implements Observer {
 
     private void setStatisticGrid(StatisticCounter statisticCounter) {
         Platform.runLater(()->{
-            filtrPrecision.setText(statisticCounter.getFilteredPrecission());
+            filtrPrecision.setText(statisticCounter.getFilteredPrecision());
             filtrRecall.setText(statisticCounter.getFilteredRecall());
             filtrSpecificity.setText(statisticCounter.getFilteredSpecificity());
             filtrAccuracy.setText(statisticCounter.getFilteredAccuracy());
