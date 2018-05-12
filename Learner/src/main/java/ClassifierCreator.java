@@ -1,7 +1,5 @@
-import weka.classifiers.Classifier;
 import weka.classifiers.Evaluation;
 import weka.classifiers.functions.MultilayerPerceptron;
-import weka.classifiers.trees.RandomForest;
 import weka.core.Instances;
 import weka.core.SerializationHelper;
 import weka.core.converters.ArffLoader;
@@ -47,7 +45,6 @@ public class ClassifierCreator extends Observable implements Runnable {
         notifyObservers(RANDOMIZE_DATA_SET);
         dataSet.randomize(new Random());
         try {
-            long start = System.currentTimeMillis();
             notifyObservers(BUILD_CLASSIFIER);
             MultilayerPerceptron classifier = new MultilayerPerceptron();
             classifier.setLearningRate(0.1);
@@ -55,17 +52,12 @@ public class ClassifierCreator extends Observable implements Runnable {
             classifier.setTrainingTime(5000);
             classifier.setHiddenLayers("3");
             classifier.buildClassifier(dataSet);
-            System.out.println("Build = "+(System.currentTimeMillis()-start)+" ms");
-            start = System.currentTimeMillis();
             notifyObservers(CROSS_VALIDATE);
             Evaluation evaluation = new Evaluation(dataSet);
             evaluation.crossValidateModel(classifier, dataSet, 10, new Random());
-            System.out.println("CrossValidate = "+(System.currentTimeMillis()-start)+" ms");
             System.out.println(evaluation.toSummaryString("\nResults\n======\n", true));
-            start = System.currentTimeMillis();
             notifyObservers(SAVING_MODEL);
-            SerializationHelper.write("MultilayerPerceptron_"+(dataSet.numAttributes()-1)+"_"+dataSet.numInstances()+".model", classifier);
-            System.out.println("Saving = "+(System.currentTimeMillis()-start)+" ms");
+            SerializationHelper.write("MultilayerPerceptron_" + (dataSet.numAttributes() - 1) + "_" + dataSet.numInstances() + ".model", classifier);
             notifyObservers(DONE);
         } catch (Exception e) {
             e.printStackTrace();

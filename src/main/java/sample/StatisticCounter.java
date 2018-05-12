@@ -44,19 +44,15 @@ public class StatisticCounter extends Observable implements Runnable {
 
     @Override
     public void run() {
-        long start = System.currentTimeMillis();
         for (int i = 0; i < maskImage.height(); i++) {
             for (int j = 0; j < maskImage.width(); j++) {
                 if (maskImage.get(i, j)[0] != 0) {
                     double expertColor = expertImage.get(i, j)[0];
-                    if (expertColor != WHITE && expertColor != BLACK)
-                    System.out.println(expertColor);
                     checkFilteredImage(expertColor, i, j);
                     checkClassifiedImage(expertColor, i, j);
                 }
             }
         }
-        System.out.println("Stat time = "+(System.currentTimeMillis()-start)+" ms");
         notifyObservers();
     }
 
@@ -124,62 +120,62 @@ public class StatisticCounter extends Observable implements Runnable {
         return fnClassified;
     }
 
-    public String getFilteredPrecision(){
-        double result = (double) tpFiltered / (double)(tpFiltered+fpFiltered);
+    public String getFilteredPrecision() {
+        double result = (double) tpFiltered / (double) (tpFiltered + fpFiltered);
         DecimalFormat decimalFormat = new DecimalFormat("#.##");
         return decimalFormat.format(result);
     }
 
-    public String getFilteredRecall(){
-        double result = (double) tpFiltered / (double)(tpFiltered+fnFiltered);
+    public String getFilteredRecall() {
+        double result = (double) tpFiltered / (double) (tpFiltered + fnFiltered);
         DecimalFormat decimalFormat = new DecimalFormat("#.##");
         return decimalFormat.format(result);
     }
 
-    public String getFilteredSpecificity(){
-        double result = (double) tnFiltered/ (double)(tnFiltered+fpFiltered);
+    public String getFilteredSpecificity() {
+        double result = (double) tnFiltered / (double) (tnFiltered + fpFiltered);
         DecimalFormat decimalFormat = new DecimalFormat("#.##");
         return decimalFormat.format(result);
     }
 
-    public String getFilteredAccuracy(){
-        double result = (double) (tpFiltered+tnFiltered) / (double)(tpFiltered+tnFiltered+fpFiltered+fnFiltered);
+    public String getFilteredAccuracy() {
+        double result = (double) (tpFiltered + tnFiltered) / (double) (tpFiltered + tnFiltered + fpFiltered + fnFiltered);
         DecimalFormat decimalFormat = new DecimalFormat("#.##");
         return decimalFormat.format(result);
     }
 
-    public String getFilteredMatthews(){
-        double result = ((double)(tpFiltered*tnFiltered)-(double)(fpFiltered*fnFiltered))/(Math.sqrt((double) (tpFiltered+fpFiltered)*(double) (tpFiltered+fnFiltered)*(double) (tnFiltered+fpFiltered)*(double) (tnFiltered+fnFiltered)));
+    public String getFilteredMatthews() {
+        double result = ((double) (tpFiltered * tnFiltered) - (double) (fpFiltered * fnFiltered)) / (Math.sqrt((double) (tpFiltered + fpFiltered) * (double) (tpFiltered + fnFiltered) * (double) (tnFiltered + fpFiltered) * (double) (tnFiltered + fnFiltered)));
         DecimalFormat decimalFormat = new DecimalFormat("#.##");
         return decimalFormat.format(result);
     }
 
-    public String getClassifiedPrecission(){
-        double result = (double) tpClassified / (double)(tpClassified+fpClassified);
+    public String getClassifiedPrecission() {
+        double result = (double) tpClassified / (double) (tpClassified + fpClassified);
         DecimalFormat decimalFormat = new DecimalFormat("#.##");
         return decimalFormat.format(result);
     }
 
-    public String getClassifiedRecall(){
-        double result = (double) tpClassified / (double)(tpClassified+fnClassified);
+    public String getClassifiedRecall() {
+        double result = (double) tpClassified / (double) (tpClassified + fnClassified);
         DecimalFormat decimalFormat = new DecimalFormat("#.##");
         return decimalFormat.format(result);
     }
 
-    public String getClassifiedSpecificity(){
-        double result = (double) tnClassified/ (double)(tnClassified+fpClassified);
+    public String getClassifiedSpecificity() {
+        double result = (double) tnClassified / (double) (tnClassified + fpClassified);
         DecimalFormat decimalFormat = new DecimalFormat("#.##");
         return decimalFormat.format(result);
     }
 
-    public String getClassifiedAccuracy(){
-        double result = (double) (tpClassified+tnClassified) / (double)(tpClassified+tnClassified+fpClassified+fnClassified);
+    public String getClassifiedAccuracy() {
+        double result = (double) (tpClassified + tnClassified) / (double) (tpClassified + tnClassified + fpClassified + fnClassified);
         DecimalFormat decimalFormat = new DecimalFormat("#.##");
         return decimalFormat.format(result);
     }
 
-    public String getClassifiedMatthews(){
-        double result = ((double)(tpClassified*tnClassified)-(double)(fpClassified*fnClassified))/(Math.sqrt((double) (tpClassified+fpClassified)*(double) (tpClassified+fnClassified)*(double) (tnClassified+fpClassified)*(double) (tnClassified+fnClassified)));
+    public String getClassifiedMatthews() {
+        double result = ((double) (tpClassified * tnClassified) - (double) (fpClassified * fnClassified)) / (Math.sqrt((double) (tpClassified + fpClassified) * (double) (tpClassified + fnClassified) * (double) (tnClassified + fpClassified) * (double) (tnClassified + fnClassified)));
         DecimalFormat decimalFormat = new DecimalFormat("#.##");
         return decimalFormat.format(result);
     }

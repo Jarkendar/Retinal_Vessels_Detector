@@ -87,24 +87,23 @@ public class ClassifierImage extends Observable implements Runnable {
 
     @Override
     public void run() {
-        long start = System.currentTimeMillis();
         for (int i = ODD_SQUARE_SIZE; i < inputImage.rows() - ODD_SQUARE_SIZE; i++) {
             for (int j = ODD_SQUARE_SIZE; j < inputImage.cols() - ODD_SQUARE_SIZE; j++) {
-                if (maskImage.get(i,j)[0] != 0.0) {
+                if (maskImage.get(i, j)[0] != 0.0) {
                     Mat surroundingSquare = cutSquareFromImage(j, i, inputImage);
                     Instance instance = createInstanceFromMat(surroundingSquare);
                     try {
                         double[] clsLabel = classifier.distributionForInstance(instance);
                         if (clsLabel[0] > clsLabel[1]) {
-                            outputImage.put(i-ODD_SQUARE_SIZE, j, 255.0);
+                            outputImage.put(i - ODD_SQUARE_SIZE, j, 255.0);
                         } else {
-                            outputImage.put(i-ODD_SQUARE_SIZE, j, 0.0);
+                            outputImage.put(i - ODD_SQUARE_SIZE, j, 0.0);
                         }
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
-                }else {
-                    outputImage.put(i,j,0.0);
+                } else {
+                    outputImage.put(i, j, 0.0);
                 }
             }
         }
@@ -112,7 +111,6 @@ public class ClassifierImage extends Observable implements Runnable {
         Mat median = new Mat();
         Imgproc.medianBlur(outputImage, median, 9);
         outputImage = median;
-        System.out.println("time = "+(System.currentTimeMillis()-start));
         saveBitmap(outputImage, "classified");
         notifyObservers();
     }
@@ -125,7 +123,7 @@ public class ClassifierImage extends Observable implements Runnable {
     }
 
     private Instance createInstanceFromMat(Mat square) {
-        Instance instance = new Instance((int) Math.pow(ODD_SQUARE_SIZE, 2)+1);
+        Instance instance = new Instance((int) Math.pow(ODD_SQUARE_SIZE, 2) + 1);
         instance.setDataset(instances);
         for (int i = 0; i < square.width(); i++) {
             for (int j = 0; j < square.height(); j++) {
